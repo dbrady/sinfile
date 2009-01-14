@@ -2,11 +2,7 @@
 
 Sinatra File Server.
 
-Create a folder called "public" and put your files in it. Put
-sinfile.rb in the folder above public and run it. The files in public
-will be served up.
+Just run "sinfile" in the current directory and you're done. Point
+your browser at http://localhost:4567 to see your files.
 
-= Gem Version!
-
-From the folder above the public folder, just run "sinfile" and you're
-good to go.
+Choose a different port with -p, e.g. "sinfile -p 80".

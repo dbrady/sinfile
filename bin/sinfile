@@ -11,6 +11,6 @@ Sinatra::Application.default_options.merge!(
 
 get '/' do
   dir = File.expand_path('.')
-  str = "<ul>" + (Dir[File.join(dir, '**', '*')].reject {|p| File.directory? p }.map {|p| p.sub %r{^#{dir}/}, ""}.map {|p| "<li><a href=\"#{p}\">#{p}</a> - #{dir}/#{p}</li>"} * "\n") + "</ul>"
+  str = "<ul>" + (Dir[File.join(dir, '**', '*')].reject {|p| File.directory? p }.map {|p| p.sub %r{^#{dir}/}, ""}.map {|p| "<li><a href=\"#{p}\">#{p}</a></li>"} * "\n") + "</ul>"
   "#{dir}<br/>#{str}"
 end 
