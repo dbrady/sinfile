@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+gem 'sinatra'
+require 'sinatra'
+
+Sinatra::Application.default_options.merge!(
+  :public => File.join(File.expand_path('.'), 'public')
+)
+
+
+get '/' do
+  dir = File.expand_path('.')
+  str = "<ul>" + (Dir[File.join(dir, 'public', '**', '*')].reject {|p| File.directory? p }.map {|p| p.sub %r{^#{dir}/public/}, ""}.map {|p| "<li><a href=\"#{p}\">#{p}</a> - #{dir}/public/#{p}</li>"} * "\n") + "</ul>"
+  "#{dir}<br/>#{str}"
+end 
