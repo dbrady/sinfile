@@ -1,6 +1,6 @@
 spec = Gem::Specification.new do |s|
   s.name = 'sinfile'
-  s.version = '0.0.1'
+  s.version = '0.0.2'
   s.date = '2009-01-13'
   s.summary = 'Simple file server using Sinatra'
   s.email = "github@shinybit.com"

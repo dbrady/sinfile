@@ -5,12 +5,12 @@ gem 'sinatra'
 require 'sinatra'
 
 Sinatra::Application.default_options.merge!(
-  :public => File.join(File.expand_path('.'), 'public')
+  :public => File.expand_path('.')
 )
 
 
 get '/' do
   dir = File.expand_path('.')
-  str = "<ul>" + (Dir[File.join(dir, 'public', '**', '*')].reject {|p| File.directory? p }.map {|p| p.sub %r{^#{dir}/public/}, ""}.map {|p| "<li><a href=\"#{p}\">#{p}</a> - #{dir}/public/#{p}</li>"} * "\n") + "</ul>"
+  str = "<ul>" + (Dir[File.join(dir, '**', '*')].reject {|p| File.directory? p }.map {|p| p.sub %r{^#{dir}/}, ""}.map {|p| "<li><a href=\"#{p}\">#{p}</a> - #{dir}/#{p}</li>"} * "\n") + "</ul>"
   "#{dir}<br/>#{str}"
 end 
