@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 
 require 'rubygems'
-gem 'sinatra', '= 0.3.3'
+gem 'sinatra'
 require 'sinatra'
 
-Sinatra::Application.default_options.merge!(
-  :public => File.expand_path('.')
-)
 
+configure do
+  set :public, File.expand_path('.')
+end
 
 get '/' do
   dir = File.expand_path('.')
