@@ -14,4 +14,5 @@ spec = Gem::Specification.new do |s|
 
   s.files = ["bin/sinfile",
              "README.txt"]
+
 end
