@@ -9,8 +9,16 @@ configure do
   set :public, File.expand_path('.')
 end
 
-get '/' do
-  dir = File.expand_path('.')
-  str = "<ul>" + (Dir[File.join(dir, '**', '*')].reject {|p| File.directory? p }.map {|p| p.sub %r{^#{dir}/}, ""}.map {|p| "<li><a href=\"#{p}\">#{p}</a></li>"} * "\n") + "</ul>"
-  "#{dir}<br/>#{str}"
+get '*' do
+  dir = File.expand_path(File.join('.', params["splat"]))
+  
+  if File.directory?(dir)
+    str = ''
+    str += "<h2>Index of '#{params['splat']}'</h2>"
+    str += "<ul>"
+    str += "<li><a href=\"#{File.split(params['splat'][0])[0]}\">..</a</li>\n" unless params['splat'] == ['/']
+    str += (Dir[File.join(dir, '*')].map{|p| p.sub(%r{^#{dir}}, '')}.map {|p| "<li><a href=\"#{File.join(params['splat'],p)}\">#{p}</a>"} * "\n") + "</ul>"
+  else
+    "<h1>Path #{dir} does not exist</h1>"
+  end
 end 
