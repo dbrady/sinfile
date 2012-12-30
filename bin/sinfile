@@ -5,19 +5,52 @@ gem 'sinatra'
 require 'sinatra/base'
 
 class Application < Sinatra::Base
-  set :public, File.expand_path('.')
+  set :public_folder, File.expand_path('.')
 
-  get '*' do
-    dir = File.expand_path(File.join('.', params["splat"]))
+  def append_slash_to_folders(folder)
+    folder + ('/' if File.directory? folder).to_s
+  end
+
+  def strip_system_root_directory(dir, path)
+    path.sub(%r{^#{dir}/}, '')
+  end
+
+  def linkify_file_name(p, title=nil)
+    title ||= p
+    "<a href=\"#{File.join(params['splat'],p)}\">#{title}</a>"
+  end
+
+  def li(html, indent=1)
+    indent = "    " * indent
+    "#{indent}<li>#{html}</li>"
+  end
+
+  def join_links(ray)
+    ray * "\n"
+  end
+
+  def render_webpage(dir)
     if File.directory?(dir)
       str = ''
-      str += "<h2>Index of '#{params['splat']}'</h2>"
-      str += "<ul>"
-      str += "<li><a href=\"#{File.split(params['splat'][0])[0]}\">..</a</li>\n" unless params['splat'] == ['/']
-      str += (Dir[File.join(dir, '*')].map{|p| p + ('/' if File.directory?(p)).to_s}.map{|p| p.sub(%r{^#{dir}/}, '')}.map {|p| "<li><a href=\"#{File.join(params['splat'],p)}\">#{p}</a>"} * "\n") + "</ul>"
+      str += "<h2>Index of '#{params['splat']}'</h2>\n"
+
+      str += "<ul>\n"
+      str += li linkify_file_name(File.split(params['splat'][0])[0], '..') unless params['splat'] == ['/']
+      str += join_links(Dir[File.join(dir, '*')].map{|p|
+                          append_slash_to_folders p
+                        }.map {|p|
+                          strip_system_root_directory dir, p
+                        }.map {|p|
+                          li linkify_file_name(p)
+                        }) + "</ul>"
     else
       "<h1>Path #{dir} does not exist</h1>"
     end
+  end
+
+  get '*' do
+    dir = File.expand_path(File.join('.', params["splat"]))
+    render_webpage dir
   end
 
   if __FILE__==$0
